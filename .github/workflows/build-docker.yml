@@ -1,0 +1,41 @@
+name: Build Docker Image on Tag
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract tag name
+        id: tag
+        run: |
+          echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        run: |
+          IMAGE_NAME=nextcloudcmd-cron
+          docker build -t $IMAGE_NAME:${TAG_NAME} -t $IMAGE_NAME:latest .
+
+      - name: Save Docker image as tar
+        run: |
+          IMAGE_NAME=nextcloudcmd-cron
+          docker save $IMAGE_NAME:${TAG_NAME} -o $IMAGE_NAME-${TAG_NAME}.tar
+          docker save $IMAGE_NAME:latest -o $IMAGE_NAME-latest.tar
+
+      - name: Upload Docker image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nextcloudcmd-cron-${TAG_NAME}
+          path: |
+            nextcloudcmd-cron-${TAG_NAME}.tar
+            nextcloudcmd-cron-latest.tar
