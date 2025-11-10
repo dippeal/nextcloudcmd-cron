@@ -101,13 +101,17 @@ echo "PUID=$PUID" >> /etc/environment
 echo "PGID=$PGID" >> /etc/environment
 
 # Create cron schedule dynamically
-echo "$NC_CRONTIME root gosu nextcloud /usr/local/bin/run_sync.sh >> /proc/1/fd/1 2>&1" > /etc/cron.d/nextcloud-cron
+cat <<CRON > /etc/cron.d/nextcloud-cron
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+$NC_CRONTIME root bash -c "/usr/sbin/gosu nextcloud /usr/local/bin/run_sync.sh >> /proc/1/fd/1 2>&1"
+CRON
+
 chmod 0644 /etc/cron.d/nextcloud-cron
 crontab /etc/cron.d/nextcloud-cron
 
 # Perform initial sync
 echo "[$(date)] Performing initial sync..." >&1
-gosu nextcloud /usr/local/bin/run_sync.sh
+/usr/sbin/gosu nextcloud /usr/local/bin/run_sync.sh
 
 # Start cron in foreground
 echo "[$(date)] Starting cron with schedule: $NC_CRONTIME" >&1
