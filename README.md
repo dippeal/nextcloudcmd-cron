@@ -23,6 +23,8 @@ See https://docs.nextcloud.com/server/stable/admin_manual/desktop/commandline.ht
 ### Optional parameters
 | Parameter          | Default       |
 |--------------------|---------------|
+| PUID               | 1000          |
+| PGID               | 1000          |
 | NC_CRONTIME        | */5 * * * *   |
 | NC_SILENT          | false         |
 | NC_NTRC            | false         |
