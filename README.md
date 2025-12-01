@@ -21,17 +21,19 @@ nextcloudcmd-cron
 See https://docs.nextcloud.com/server/stable/admin_manual/desktop/commandline.html#exclude-list
 
 ### Optional parameters
-| Parameter          | Default       |
-|--------------------|---------------|
-| PUID               | 1000          |
-| PGID               | 1000          |
-| NC_CRONTIME        | */5 * * * *   |
-| NC_SILENT          | false         |
-| NC_NTRC            | false         |
-| NC_SSL_TRUST       | false         |
-| NC_HTTP_PROXY      |               |
-| NC_SYNC_RETRIES    | 3             |
-| NC_SYNC_HIDDEN     | false         |
+| Parameter          | Default           |
+|--------------------|-------------------|
+| PUID               | 1000              |
+| PGID               | 1000              |
+| NC_CRONTIME        | */5 * * * *       |
+| NC_SILENT          | false             |
+| NC_NTRC            | false             |
+| NC_SSL_TRUST       | false             |
+| NC_HTTP_PROXY      |                   |
+| NC_SYNC_RETRIES    | 3                 |
+| NC_SYNC_HIDDEN     | false             |
+| LOCALE             | de_DE.UTF-8 UTF-8 |
+| LANG               | de_DE.utf8        |
 
 
 ## Automatic build docker image

@@ -13,6 +13,8 @@ ENV NC_SYNC_HIDDEN="false"
 ENV NC_CRONTIME="*/5 * * * *"
 ENV PUID="1000"
 ENV PGID="1000"
+ENV LOCALE="de_DE.UTF-8 UTF-8"
+ENV LANG="de_DE.utf8"
 
 # === Install dependencies ===
 RUN apt-get update && \
@@ -22,8 +24,11 @@ RUN apt-get update && \
         ca-certificates \
         curl \
         python3 \
-        gosu && \
+        gosu \
+        locales && \
     rm -rf /var/lib/apt/lists/*
+
+RUN echo $LOCALE >> /etc/locale.gen && locale-gen
 
 WORKDIR /nextcloud
 
@@ -99,6 +104,9 @@ chown -R "$PUID:$PGID" /nextcloud
 printenv | grep '^NC_' > /etc/environment
 echo "PUID=$PUID" >> /etc/environment
 echo "PGID=$PGID" >> /etc/environment
+echo "LC_ALL=$LANG" >> /etc/environment
+echo "LANG=$LANG" >> /etc/environment
+echo "LANGUAGE=$LANG" >> /etc/environment
 
 # Create cron schedule dynamically
 cat <<CRON > /etc/cron.d/nextcloud-cron
