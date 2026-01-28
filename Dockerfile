@@ -39,7 +39,7 @@ set -e
 
 # Validate required values
 if [ -z "$NC_USER" ] || [ -z "$NC_PASS" ] || [ -z "$NC_URL" ]; then
-  echo "ERROR: NC_USER, NC_PASS and NC_URL must be set!" >&2
+  echo "$(date '+%d.%m.%Y %H:%M:%S') [ERROR] NC_USER, NC_PASS and NC_URL must be set!" >&2
   exit 1
 fi
 
@@ -71,9 +71,9 @@ if [ -f "$UNSYNC_FILE" ]; then
 fi
 
 # Start sync
-echo "[$(date)] Starting Nextcloud sync as user $(id -u):$(id -g) ..." >&1
+echo "$(date '+%d.%m.%Y %H:%M:%S') [INFO] Starting Nextcloud sync as user $(id -u):$(id -g) ..." >&1
 nextcloudcmd $ARGS /nextcloud/data "$FULL_URL"
-echo "[$(date)] Sync complete." >&1
+echo "$(date '+%d.%m.%Y %H:%M:%S') [INFO] Sync complete." >&1
 EOF
 
 RUN chmod +x /usr/local/bin/run_sync.sh
@@ -118,11 +118,11 @@ chmod 0644 /etc/cron.d/nextcloud-cron
 crontab /etc/cron.d/nextcloud-cron
 
 # Perform initial sync
-echo "[$(date)] Performing initial sync..." >&1
+echo "$(date '+%d.%m.%Y %H:%M:%S') [INFO] Performing initial sync ..." >&1
 /usr/sbin/gosu nextcloud /usr/local/bin/run_sync.sh
 
 # Start cron in foreground
-echo "[$(date)] Starting cron with schedule: $NC_CRONTIME" >&1
+echo "$(date '+%d.%m.%Y %H:%M:%S') [INFO] Starting cron with schedule: $NC_CRONTIME" >&1
 exec cron -f
 EOF
 

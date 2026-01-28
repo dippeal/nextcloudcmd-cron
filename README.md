@@ -6,7 +6,7 @@ nextcloudcmd that repeats synchronizations with cronjob. See https://docs.nextcl
 docker run -d \
 -v /my/data/path:/nextcloud/data \
 -e NC_USER="username" \
--e NC_PASS="MY-CLIENT-APP-PASSWORD" \
+-e NC_PASS="my-client-app-password" \
 -e NC_URL="https://cloud.example.com" \
 --name nextcloud_sync \
 nextcloudcmd-cron
@@ -35,8 +35,7 @@ See https://docs.nextcloud.com/server/stable/admin_manual/desktop/commandline.ht
 | LOCALE             | de_DE.UTF-8 UTF-8 |
 | LANG               | de_DE.utf8        |
 
-
-## Automatic build docker image
+## Automatically build Docker image
 - Add new tag and take a look at Actions > Build Docker Image on Tag (see .github/workflows/build-docker.yml)
 
 ```bash
@@ -44,7 +43,7 @@ git tag <x.y.z>
 git push --tags
 ```
 
-## Manually build docker image
+## Manually build Docker image
 ```bash
 git clone https://github.com/dippeal/nextcloudcmd-cron.git
 cd nextcloudcmd-cron/
