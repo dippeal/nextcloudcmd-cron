@@ -7,9 +7,10 @@ ENV NC_URL=""
 ENV NC_NTRC="false"
 ENV NC_SILENT="false"
 ENV NC_SSL_TRUST="false"
+ENV NC_SYNC_HIDDEN="false"
+ENV NC_PATH=""
 ENV NC_HTTP_PROXY=""
 ENV NC_SYNC_RETRIES=""
-ENV NC_SYNC_HIDDEN="false"
 ENV NC_CRONTIME="*/5 * * * *"
 ENV PUID="1000"
 ENV PGID="1000"
@@ -55,8 +56,9 @@ ARGS=""
 if [ "$NC_NTRC" = "true" ]; then ARGS="$ARGS -n"; fi
 if [ "$NC_SILENT" = "true" ]; then ARGS="$ARGS -s"; fi
 if [ "$NC_SSL_TRUST" = "true" ]; then ARGS="$ARGS --trust"; fi
-if [ -n "$NC_SYNC_RETRIES" ]; then ARGS="$ARGS --max-sync-retries $NC_SYNC_RETRIES"; fi
 if [ "$NC_SYNC_HIDDEN" = "true" ]; then ARGS="$ARGS -h"; fi
+if [ -n "$NC_PATH" ]; then ARGS="$ARGS --path $NC_PATH"; fi
+if [ -n "$NC_SYNC_RETRIES" ]; then ARGS="$ARGS --max-sync-retries $NC_SYNC_RETRIES"; fi
 if [ -n "$NC_HTTP_PROXY" ]; then ARGS="$ARGS --httpproxy $NC_HTTP_PROXY"; fi
 
 # Optional exclude and unsynced folder files
