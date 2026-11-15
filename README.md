@@ -1,5 +1,5 @@
 # nextcloudcmd-cron
-nextcloudcmd that repeats synchronizations with cronjob. See https://docs.nextcloud.com/server/stable/admin_manual/desktop/commandline.html
+nextcloudcmd that repeats synchronizations with cronjob. See https://docs.nextcloud.com/server/stable/admin_manual/occ_command.html
 
 ## Start container
 ```bash
@@ -18,7 +18,7 @@ nextcloudcmd-cron
 | /xyz/sync-exclude.lst    | /nextcloud/sync-exclude.lst    |
 | /xyz/unsyncedfolders.lst | /nextcloud/unsyncedfolders.lst |
 
-See https://docs.nextcloud.com/server/stable/admin_manual/desktop/commandline.html#exclude-list
+See https://docs.nextcloud.com/server/stable/user_manual/en/desktop/commandline.html#exclude-list
 
 ### Optional parameters
 | Parameter          | Default           |
@@ -30,18 +30,14 @@ See https://docs.nextcloud.com/server/stable/admin_manual/desktop/commandline.ht
 | NC_NTRC            | false             |
 | NC_SSL_TRUST       | false             |
 | NC_HTTP_PROXY      |                   |
+| NC_PATH            |                   |
 | NC_SYNC_RETRIES    | 3                 |
 | NC_SYNC_HIDDEN     | false             |
 | LOCALE             | de_DE.UTF-8 UTF-8 |
 | LANG               | de_DE.utf8        |
 
 ## Automatically build Docker image
-- Add new tag and take a look at Actions > Build Docker Image on Tag (see .github/workflows/build-docker.yml)
-
-```bash
-git tag <x.y.z>
-git push --tags
-```
+Daily cronjob thats checks if the debian base-image updates. If yes the actions builds a new nextcloudcmd-cron image.
 
 ## Manually build Docker image
 ```bash
