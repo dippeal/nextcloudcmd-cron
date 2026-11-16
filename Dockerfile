@@ -1,4 +1,4 @@
-FROM debian:latest
+FROM debian:stable-slim
 
 # === Environment Variables ===
 ENV NC_USER=""
@@ -11,6 +11,8 @@ ENV NC_SYNC_HIDDEN="false"
 ENV NC_PATH=""
 ENV NC_HTTP_PROXY=""
 ENV NC_SYNC_RETRIES=""
+ENV NC_UPLIMIT=""
+ENV NC_DOWNLIMIT=""
 ENV NC_CRONTIME="*/5 * * * *"
 ENV PUID="1000"
 ENV PGID="1000"
@@ -60,6 +62,8 @@ if [ "$NC_SYNC_HIDDEN" = "true" ]; then ARGS="$ARGS -h"; fi
 if [ -n "$NC_PATH" ]; then ARGS="$ARGS --path $NC_PATH"; fi
 if [ -n "$NC_SYNC_RETRIES" ]; then ARGS="$ARGS --max-sync-retries $NC_SYNC_RETRIES"; fi
 if [ -n "$NC_HTTP_PROXY" ]; then ARGS="$ARGS --httpproxy $NC_HTTP_PROXY"; fi
+if [ -n "$NC_UPLIMIT" ]; then ARGS="$ARGS --uplimit $NC_UPLIMIT"; fi
+if [ -n "$NC_DOWNLIMIT" ]; then ARGS="$ARGS --downlimit $NC_DOWNLIMIT"; fi
 
 # Optional exclude and unsynced folder files
 EXCLUDE_FILE="/nextcloud/sync-exclude.lst"
@@ -74,6 +78,7 @@ fi
 
 # Start sync
 echo "$(date '+%d.%m.%Y %H:%M:%S') [INFO] Starting Nextcloud sync as user $(id -u):$(id -g) ..." >&1
+echo "$(date '+%d.%m.%Y %H:%M:%S') [INFO] Running with parameters: $ARGS" >&1
 nextcloudcmd $ARGS /nextcloud/data "$FULL_URL"
 echo "$(date '+%d.%m.%Y %H:%M:%S') [INFO] Sync complete." >&1
 EOF
