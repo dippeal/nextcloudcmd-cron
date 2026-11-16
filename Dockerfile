@@ -53,33 +53,35 @@ ENC_PASS=$(python3 -c "import urllib.parse, os; print(urllib.parse.quote(os.envi
 # Build full URL
 FULL_URL=$(echo "$NC_URL" | sed "s#://#://$ENC_USER:$ENC_PASS@#")
 
-# Build argument list
-ARGS=""
-if [ "$NC_NTRC" = "true" ]; then ARGS="$ARGS -n"; fi
-if [ "$NC_SILENT" = "true" ]; then ARGS="$ARGS -s"; fi
-if [ "$NC_SSL_TRUST" = "true" ]; then ARGS="$ARGS --trust"; fi
-if [ "$NC_SYNC_HIDDEN" = "true" ]; then ARGS="$ARGS -h"; fi
-if [ -n "$NC_PATH" ]; then ARGS="$ARGS --path $NC_PATH"; fi
-if [ -n "$NC_SYNC_RETRIES" ]; then ARGS="$ARGS --max-sync-retries $NC_SYNC_RETRIES"; fi
-if [ -n "$NC_HTTP_PROXY" ]; then ARGS="$ARGS --httpproxy $NC_HTTP_PROXY"; fi
-if [ -n "$NC_UPLIMIT" ]; then ARGS="$ARGS --uplimit $NC_UPLIMIT"; fi
-if [ -n "$NC_DOWNLIMIT" ]; then ARGS="$ARGS --downlimit $NC_DOWNLIMIT"; fi
+# Build argument array
+ARGS=()
+
+[ "$NC_NTRC" = "true" ] && ARGS+=(-n)
+[ "$NC_SILENT" = "true" ] && ARGS+=(-s)
+[ "$NC_SSL_TRUST" = "true" ] && ARGS+=(--trust)
+[ "$NC_SYNC_HIDDEN" = "true" ] && ARGS+=(-h)
+
+[ -n "$NC_PATH" ] && ARGS+=(--path "$NC_PATH")
+[ -n "$NC_SYNC_RETRIES" ] && ARGS+=(--max-sync-retries "$NC_SYNC_RETRIES")
+[ -n "$NC_HTTP_PROXY" ] && ARGS+=(--httpproxy "$NC_HTTP_PROXY")
+[ -n "$NC_UPLIMIT" ] && ARGS+=(--uplimit "$NC_UPLIMIT")
+[ -n "$NC_DOWNLIMIT" ] && ARGS+=(--downlimit "$NC_DOWNLIMIT")
 
 # Optional exclude and unsynced folder files
 EXCLUDE_FILE="/nextcloud/sync-exclude.lst"
-if [ -f "$EXCLUDE_FILE" ]; then
-  ARGS="$ARGS --exclude $EXCLUDE_FILE"
-fi
+[ -f "$EXCLUDE_FILE" ] && ARGS+=(--exclude "$EXCLUDE_FILE")
 
 UNSYNC_FILE="/nextcloud/unsyncedfolders.lst"
-if [ -f "$UNSYNC_FILE" ]; then
-  ARGS="$ARGS --unsyncedfolders $UNSYNC_FILE"
-fi
+[ -f "$UNSYNC_FILE" ] && ARGS+=(--unsyncedfolders "$UNSYNC_FILE")
 
 # Start sync
 echo "$(date '+%d.%m.%Y %H:%M:%S') [INFO] Starting Nextcloud sync as user $(id -u):$(id -g) ..." >&1
-echo "$(date '+%d.%m.%Y %H:%M:%S') [INFO] Running with parameters: $ARGS" >&1
-nextcloudcmd $ARGS /nextcloud/data "$FULL_URL"
+printf '%s [INFO] Running with parameters:' "$(date '+%d.%m.%Y %H:%M:%S')" >&1
+printf ' %q' "${ARGS[@]}" >&1
+printf '\n'
+
+nextcloudcmd "${ARGS[@]}" /nextcloud/data "$FULL_URL"
+
 echo "$(date '+%d.%m.%Y %H:%M:%S') [INFO] Sync complete." >&1
 EOF
 
